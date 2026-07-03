@@ -55,6 +55,16 @@ try:
         with open(output_file, "w", encoding="utf-8") as file:
             yaml.dump(dane, file, allow_unicode=True, sort_keys=False)
 
+    elif output_file.endswith(".xml"):
+        root = ET.Element("data")
+
+        for key, value in dane.items():
+            element = ET.SubElement(root, key)
+            element.text = str(value)
+
+        tree = ET.ElementTree(root)
+        tree.write(output_file, encoding="utf-8", xml_declaration=True)
+
     else:
         print("Nieobsługiwany format pliku wyjściowego.")
         exit()

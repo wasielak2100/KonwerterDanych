@@ -1,0 +1,41 @@
+name: Build EXE
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+
+  schedule:
+    - cron: '0 12 * * 1'
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Pobranie repozytorium
+        uses: actions/checkout@v4
+
+      - name: Instalacja Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Instalacja bibliotek
+        shell: powershell
+        run: ./installResources.ps1
+
+      - name: Instalacja PyInstaller
+        run: pip install pyinstaller
+
+      - name: Budowanie EXE
+        run: pyinstaller --onefile --noconsole gui.py
+
+      - name: Przesłanie EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: KonwerterEXE
+          path: dist/*.exe

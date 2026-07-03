@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import yaml
 
 # Sprawdzenie liczby argumentów
 if len(sys.argv) != 3:
@@ -21,15 +22,32 @@ print("Plik wejściowy:", input_file)
 print("Plik wyjściowy:", output_file)
 
 try:
-    with open(input_file, "r", encoding="utf-8") as file:
-        dane = json.load(file)
+    # Wczytanie danych
+    if input_file.endswith(".json"):
+        with open(input_file, "r", encoding="utf-8") as file:
+            dane = json.load(file)
 
-    print("Plik JSON został poprawnie wczytany.")
+    elif input_file.endswith(".yaml") or input_file.endswith(".yml"):
+        with open(input_file, "r", encoding="utf-8") as file:
+            dane = yaml.safe_load(file)
 
+    else:
+        print("Nieobsługiwany format pliku.")
+        exit()
+
+    print("Plik został poprawnie wczytany.")
+
+    # Zapis danych
     with open(output_file, "w", encoding="utf-8") as file:
         json.dump(dane, file, indent=4, ensure_ascii=False)
 
     print("Plik został zapisany.")
 
+except FileNotFoundError:
+    print("Błąd! Nie znaleziono pliku.")
+
 except json.JSONDecodeError:
     print("Błąd! Niepoprawna składnia pliku JSON.")
+
+except yaml.YAMLError:
+    print("Błąd! Niepoprawna składnia pliku YAML.")

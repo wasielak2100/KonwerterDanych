@@ -25,7 +25,11 @@ try:
         dane = json.load(file)
 
     print("Plik JSON został poprawnie wczytany.")
-    print(dane)
+
+    with open(output_file, "w", encoding="utf-8") as file:
+        json.dump(dane, file, indent=4, ensure_ascii=False)
+
+    print("Plik został zapisany.")
 
 except json.JSONDecodeError:
     print("Błąd! Niepoprawna składnia pliku JSON.")

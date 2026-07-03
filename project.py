@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import yaml
+import xml.etree.ElementTree as ET
 
 # Sprawdzenie liczby argumentów
 if len(sys.argv) != 3:
@@ -30,6 +31,14 @@ try:
     elif input_file.endswith(".yaml") or input_file.endswith(".yml"):
         with open(input_file, "r", encoding="utf-8") as file:
             dane = yaml.safe_load(file)
+
+    elif input_file.endswith(".xml"):
+        tree = ET.parse(input_file)
+        root = tree.getroot()
+
+        dane = {}
+        for element in root:
+            dane[element.tag] = element.text
 
     else:
         print("Nieobsługiwany format pliku wejściowego.")
@@ -60,3 +69,6 @@ except json.JSONDecodeError:
 
 except yaml.YAMLError:
     print("Błąd! Niepoprawna składnia pliku YAML.")
+
+except ET.ParseError:
+    print("Błąd! Niepoprawna składnia pliku XML.")

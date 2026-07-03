@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 
 # Sprawdzenie liczby argumentów
 if len(sys.argv) != 3:
@@ -18,3 +19,13 @@ if not os.path.exists(input_file):
 
 print("Plik wejściowy:", input_file)
 print("Plik wyjściowy:", output_file)
+
+try:
+    with open(input_file, "r", encoding="utf-8") as file:
+        dane = json.load(file)
+
+    print("Plik JSON został poprawnie wczytany.")
+    print(dane)
+
+except json.JSONDecodeError:
+    print("Błąd! Niepoprawna składnia pliku JSON.")

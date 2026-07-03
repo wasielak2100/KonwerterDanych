@@ -32,14 +32,23 @@ try:
             dane = yaml.safe_load(file)
 
     else:
-        print("Nieobsługiwany format pliku.")
+        print("Nieobsługiwany format pliku wejściowego.")
         exit()
 
     print("Plik został poprawnie wczytany.")
 
     # Zapis danych
-    with open(output_file, "w", encoding="utf-8") as file:
-        json.dump(dane, file, indent=4, ensure_ascii=False)
+    if output_file.endswith(".json"):
+        with open(output_file, "w", encoding="utf-8") as file:
+            json.dump(dane, file, indent=4, ensure_ascii=False)
+
+    elif output_file.endswith(".yaml") or output_file.endswith(".yml"):
+        with open(output_file, "w", encoding="utf-8") as file:
+            yaml.dump(dane, file, allow_unicode=True, sort_keys=False)
+
+    else:
+        print("Nieobsługiwany format pliku wyjściowego.")
+        exit()
 
     print("Plik został zapisany.")
 
